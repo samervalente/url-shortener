@@ -17,3 +17,9 @@ declare namespace ExpressRequest {
     user: UserJWTResponse;
   }
 }
+
+declare module 'express' {
+  interface Request {
+    user?: UserJWTResponse;
+  }
+}

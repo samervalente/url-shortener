@@ -7,6 +7,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -17,17 +18,28 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     const ctx = host.switchToHttp();
 
-    const httpStatus =
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
+    let httpStatus: number = HttpStatus.BAD_REQUEST;
+    let message: string = 'A unknown error ocurred';
+    if (exception instanceof HttpException) {
+      httpStatus = exception.getStatus();
+      message = exception.message;
+    }
 
-    const message: string =
-      exception instanceof Error
-        ? exception.message
-        : 'An unknown error occurred';
+    if (exception instanceof PrismaClientKnownRequestError) {
+      const prismaErrorCodeMap: Record<
+        PrismaClientKnownRequestError['code'],
+        number
+      > = {
+        P2025: HttpStatus.NOT_FOUND,
+        P2002: HttpStatus.CONFLICT,
+      };
 
-    const exceptionRawObject: unknown =
+      httpStatus = prismaErrorCodeMap[exception.code];
+
+      message = (exception.meta?.cause as string) ?? exception.message;
+    }
+
+    const exceptionRawObject =
       exception &&
       typeof exception === 'object' &&
       Object.keys(exception).length > 0

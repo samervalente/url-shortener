@@ -28,4 +28,51 @@ export class URLRepository {
       },
     });
   }
+
+  updateAccessCount(where: Prisma.UrlWhereUniqueInput) {
+    return this.prisma.url.update({
+      where: {
+        ...where,
+        deletedAt: null,
+      },
+      data: {
+        accessCount: {
+          increment: 1,
+        },
+      },
+    });
+  }
+
+  findFromUser(where: Prisma.UrlWhereInput) {
+    return this.prisma.url.findMany({
+      where: {
+        ...where,
+        deletedAt: null,
+      },
+    });
+  }
+
+  updateOrigin(where: Prisma.UrlWhereUniqueInput, origin: string) {
+    return this.prisma.url.update({
+      where: {
+        ...where,
+        deletedAt: null,
+      },
+      data: {
+        origin,
+      },
+    });
+  }
+
+  softDelete(where: Prisma.UrlWhereUniqueInput) {
+    return this.prisma.url.update({
+      where: {
+        ...where,
+        deletedAt: null,
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+  }
 }

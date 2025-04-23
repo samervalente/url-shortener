@@ -1,10 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ShortURLDTO } from './url.dtos';
 import { ShortURLResponse } from './url.types';
 import { nanoid } from 'nanoid';
 import { URLRepository } from './url.repository';
-import { Request } from 'express';
 import { Prisma } from '@prisma/client';
+import { Request } from 'express';
 
 @Injectable()
 export class URLService {
@@ -23,6 +23,7 @@ export class URLService {
       origin: shortURLDTO.urlOrigin,
       shortCode,
       shortUrl,
+      userId: req.user?.userId,
     });
 
     return {
@@ -30,15 +31,21 @@ export class URLService {
     };
   }
 
-  async getURLOrigin(
-    where: Prisma.UrlWhereUniqueInput,
-  ): Promise<{ origin: string }> {
-    const urlOrigin = await this.urlRepository.getURLOrigin(where);
+  async resolveRedirectByShortCode(where: Prisma.UrlWhereUniqueInput) {
+    const url = await this.urlRepository.updateAccessCount(where);
 
-    if (!urlOrigin) {
-      throw new NotFoundException('Resource not found');
-    }
+    return { origin: url.origin };
+  }
 
-    return urlOrigin;
+  findFromUser(where: Prisma.UrlWhereInput) {
+    return this.urlRepository.findFromUser(where);
+  }
+
+  updateOrigin(where: Prisma.UrlWhereUniqueInput, origin: string) {
+    return this.urlRepository.updateOrigin(where, origin);
+  }
+
+  softDelete(where: Prisma.UrlWhereUniqueInput) {
+    return this.urlRepository.softDelete(where);
   }
 }

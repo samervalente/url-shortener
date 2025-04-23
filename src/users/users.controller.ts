@@ -46,7 +46,7 @@ export class UsersController {
   update(
     @Param('id') id: Prisma.UserWhereUniqueInput,
     @Body() updateData: UpdateUserDTO,
-  ): Promise<UserPublic | null> {
+  ) {
     return this.usersService.update(id, updateData);
   }
 }

@@ -1,8 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UsersRepository } from './users.repository';
 
 import { CreateUserDTO, UpdateUserDTO } from './users.dto';
-import { Prisma, User } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { UserPublic } from 'src/global/types';
 
 @Injectable()
@@ -19,29 +19,17 @@ export class UsersService {
     return this.usersRepository.findUserPublic(where);
   }
 
-  async findOne(where: Prisma.UserWhereUniqueInput): Promise<User | null> {
+  findOne(where: Prisma.UserWhereUniqueInput) {
     return this.usersRepository.findOne(where);
   }
-  async update(
-    where: Prisma.UserWhereUniqueInput,
-    updateData: UpdateUserDTO,
-  ): Promise<UserPublic | null> {
-    const updatedUser = await this.usersRepository.update({
+  update(where: Prisma.UserWhereUniqueInput, updateData: UpdateUserDTO) {
+    return this.usersRepository.update({
       data: updateData,
       where,
     });
-
-    if (!updatedUser) {
-      throw new NotFoundException('User not found');
-    }
-    return updatedUser;
   }
 
-  async delete(where: Prisma.UserWhereUniqueInput): Promise<User | null> {
-    const deletedUser = await this.usersRepository.delete(where);
-    if (!deletedUser) {
-      throw new NotFoundException('User not found');
-    }
-    return deletedUser;
+  softDelete(where: Prisma.UserWhereUniqueInput) {
+    return this.usersRepository.softDelete(where);
   }
 }

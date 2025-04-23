@@ -1,8 +1,8 @@
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe, VersioningType } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { ValidationPipeOptions } from './global/types';
-import { HttpExceptionFilter } from './global/http-exception-filter';
+import { HttpExceptionFilter } from './global/filters/http-exception-filter';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { Logger } from '@nestjs/common';
 import { json } from 'express';
@@ -18,17 +18,14 @@ async function bootstrap() {
     .setTitle('URL Shortener API Backend Test')
     .setDescription('')
     .setVersion('1.0')
+    .addBearerAuth(
+      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+      'JWT',
+    )
     .addTag('Teddy, Backend-test')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
-
-  // version
-  app.enableVersioning({
-    type: VersioningType.URI,
-    defaultVersion: '1',
-    prefix: 'api/v',
-  });
 
   //validation pipes
   const validationPipeOptions: ValidationPipeOptions = {

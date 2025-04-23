@@ -9,7 +9,7 @@ import { GenerateJWTPayload, UserJWTResponse } from './types';
 import { hashStr } from '../global/utils/hash';
 import { SignUpDto } from './auth.dto';
 import * as bcrypt from 'bcrypt';
-import { Prisma } from '@prisma/client';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class AuthService {
@@ -24,14 +24,14 @@ export class AuthService {
       user.password = passwordHash;
 
       return await this.usersService.create(user);
-    } catch (error: unknown) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        if (error.code === 'P2002') {
-          throw new ConflictException(`User ${user.email} already exists`);
-        }
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        throw new ConflictException(
+          `User with email ${user.email} already exist.`,
+        );
       }
 
-      throw new InternalServerErrorException(`An internal error ocurred`);
+      throw new InternalServerErrorException();
     }
   }
 

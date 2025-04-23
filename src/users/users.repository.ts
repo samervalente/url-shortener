@@ -29,7 +29,7 @@ export class UsersRepository {
   }
 
   findOne(where: Prisma.UserWhereUniqueInput): Promise<User | null> {
-    return this.prismaService.user.findUnique({
+    return this.prismaService.user.findUniqueOrThrow({
       where,
     });
   }
@@ -47,9 +47,15 @@ export class UsersRepository {
     });
   }
 
-  delete(where: Prisma.UserWhereUniqueInput): Promise<User> {
-    return this.prismaService.user.delete({
-      where,
+  softDelete(where: Prisma.UserWhereUniqueInput) {
+    return this.prismaService.user.update({
+      where: {
+        ...where,
+        deletedAt: null,
+      },
+      data: {
+        deletedAt: new Date(),
+      },
     });
   }
 }

@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  HttpCode,
   Logger,
   Post,
   Request,
@@ -15,6 +14,8 @@ import { LoginCredentialsDTO } from './auth.dto';
 import { AuthService } from './auth.service';
 import { Public } from 'src/decorators/guards.decorator';
 import { randomUUID } from 'crypto';
+import { ExpressRequest } from 'src/global/types';
+import { UserPublicResponseDTO } from 'src/users/users.dto';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -30,6 +31,7 @@ export class AuthController {
   @ApiResponse({
     status: 201,
     description: 'User account created successfully.',
+    type: UserPublicResponseDTO,
   })
   @ApiResponse({
     status: 409,
@@ -38,13 +40,12 @@ export class AuthController {
   @ApiBody({ type: SignUpDto })
   signup(@Body() body: SignUpDto) {
     const logIdentifier = randomUUID();
-    this.logger.log(`[${logIdentifier}] - new signup request with body`, body);
+    this.logger.log(`[${logIdentifier}] - new signup request with body `, body);
 
     return this.authService.signup(body);
   }
 
   @UseGuards(LocalAuthGuard)
-  @HttpCode(200)
   @Post('login')
   @ApiOperation({ summary: 'Authenticate user and return access token' })
   @ApiResponse({
@@ -59,7 +60,7 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Unauthorized.' })
   @ApiBody({ type: LoginCredentialsDTO })
   login(
-    @Request() req: LocalAuthGuard.ReqType,
+    @Request() req: ExpressRequest.ReqType,
     @Body() loginCredentialsDTO: LoginCredentialsDTO,
   ): {
     accessToken: string;
