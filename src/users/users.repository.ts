@@ -8,9 +8,12 @@ import { UserPublic } from 'src/global/types';
 export class UsersRepository {
   constructor(private prismaService: PrismaService) {}
 
-  create(data: Prisma.UserCreateInput): Promise<User> {
+  create(data: Prisma.UserCreateInput): Promise<UserPublic> {
     return this.prismaService.user.create({
       data,
+      omit: {
+        password: true,
+      },
     });
   }
 
@@ -22,6 +25,12 @@ export class UsersRepository {
       omit: {
         password: true,
       },
+    });
+  }
+
+  findOne(where: Prisma.UserWhereUniqueInput): Promise<User | null> {
+    return this.prismaService.user.findUnique({
+      where,
     });
   }
 

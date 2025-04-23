@@ -1,5 +1,6 @@
 import { ValidatorOptions } from '@nestjs/common/interfaces/external/validator-options.interface';
 import { User } from '@prisma/client';
+import { UserJWTResponse } from 'src/auth/types';
 
 export interface ValidationPipeOptions extends ValidatorOptions {
   transform?: boolean;
@@ -10,3 +11,9 @@ export interface ValidationPipeOptions extends ValidatorOptions {
 }
 
 export type UserPublic = Omit<User, 'password'> | null;
+
+declare namespace ExpressRequest {
+  interface ReqType {
+    user: UserJWTResponse;
+  }
+}

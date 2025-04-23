@@ -1,3 +1,3 @@
 export type ShortURLResponse = {
-  shortenedURL: string;
+  shortUrl: string;
 };

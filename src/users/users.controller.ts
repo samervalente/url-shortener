@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Put } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
@@ -8,30 +8,15 @@ import {
 } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 
-import { User, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 
-import {
-  CreateUserDTO,
-  UpdateUserDTO,
-  UserPublicResponseDTO,
-} from './users.dto';
+import { UpdateUserDTO, UserPublicResponseDTO } from './users.dto';
 import { UserPublic } from 'src/global/types';
 
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
-  @Post()
-  @ApiOperation({ summary: 'Create a new user' })
-  @ApiResponse({
-    status: 201,
-    description: 'User successfully created.',
-  })
-  @ApiBody({ type: CreateUserDTO })
-  create(@Body() data: CreateUserDTO): Promise<User> {
-    return this.usersService.create(data);
-  }
 
   @Get(':id/public')
   @ApiOperation({ summary: 'Get a public view of the user by ID' })

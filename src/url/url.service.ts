@@ -17,16 +17,16 @@ export class URLService {
     shortURLDTO: ShortURLDTO,
   ): Promise<ShortURLResponse> {
     const shortCode = nanoid(this.SHORT_CODE_LENGTH);
-    const shortenedURL = `${req.protocol}://${req.get('Host')}/${shortCode}`;
+    const shortUrl = `${req.protocol}://${req.get('Host')}/${shortCode}`;
 
     await this.urlRepository.create({
       origin: shortURLDTO.urlOrigin,
       shortCode,
-      shortUrl: shortenedURL,
+      shortUrl,
     });
 
     return {
-      shortenedURL,
+      shortUrl,
     };
   }
 

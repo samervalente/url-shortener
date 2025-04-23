@@ -9,7 +9,7 @@ import { UserPublic } from 'src/global/types';
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  async create(data: CreateUserDTO): Promise<User> {
+  async create(data: CreateUserDTO): Promise<UserPublic> {
     return await this.usersRepository.create(data);
   }
 
@@ -19,6 +19,9 @@ export class UsersService {
     return this.usersRepository.findUserPublic(where);
   }
 
+  async findOne(where: Prisma.UserWhereUniqueInput): Promise<User | null> {
+    return this.usersRepository.findOne(where);
+  }
   async update(
     where: Prisma.UserWhereUniqueInput,
     updateData: UpdateUserDTO,

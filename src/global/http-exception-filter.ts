@@ -46,7 +46,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
       statusCode: httpStatus,
       timestamp: new Date().toISOString(),
       message,
-      exceptionRawObject,
     };
 
     httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);
