@@ -1,0 +1,41 @@
+{
+  "name": "shortener-prisma",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shortener-prisma/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project shortener-prisma --web",
+  "targets": {
+    "prisma": {
+      "command": "prisma",
+      "options": {
+        "cwd": "libs/shortener-prisma"
+      }
+    },
+    "reset": {
+      "command": "prisma migrate reset",
+      "options": {
+        "cwd": "libs/shortener-prisma"
+      }
+    },
+    "generate-types": {
+      "command": "prisma generate",
+      "options": {
+        "cwd": "libs/shortener-prisma"
+      }
+    },
+    "migrate": {
+      "command": "prisma migrate dev",
+      "options": {
+        "cwd": "libs/shortener-prisma"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/shortener-prisma/**/*.ts"]
+      }
+    }
+  }
+}

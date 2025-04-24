@@ -1,0 +1,27 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../../db/iam"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("IAM_DATABASE_URL")
+}
+
+enum RoleEnum {
+  USER  @map("user")
+  ADMIN @map("admin")
+}
+
+model User {
+  id        String    @id @default(uuid())
+  name      String
+  password  String
+  role      RoleEnum  @default(USER)
+  email     String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@map("users")
+}

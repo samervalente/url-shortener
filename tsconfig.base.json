@@ -14,7 +14,11 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@libs/iam-prisma": ["libs/iam-prisma/src/index.ts"],
+      "@shortener-ws/prisma-shortener": ["libs/prisma-shortener/src/index.ts"],
+      "@shortener-ws/shortener-prisma": ["libs/shortener-prisma/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

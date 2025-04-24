@@ -1,0 +1,23 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../../db/shortener"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("URL_SHORTENER_DATABASE_URL")
+}
+
+model Url {
+  id          String    @id @default(uuid())
+  origin      String
+  shortCode   String    @unique
+  shortUrl    String    @unique
+  accessCount Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  userId      String?
+
+  @@map("urls")
+}
