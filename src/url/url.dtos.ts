@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsUrl, Max } from 'class-validator';
+import { IsNotEmpty, IsUrl } from 'class-validator';
 
 export class ShortURLDTO {
   @ApiProperty({
@@ -9,7 +9,6 @@ export class ShortURLDTO {
   })
   @IsUrl()
   @IsNotEmpty()
-  @Max(2048)
   urlOrigin: string;
 }
 

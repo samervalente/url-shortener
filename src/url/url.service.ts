@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ShortURLDTO } from './url.dtos';
-import { ShortURLResponse } from './url.types';
+import { ShortURLRequestParams, ShortURLResponse } from './url.types';
 import { nanoid } from 'nanoid';
 import { URLRepository } from './url.repository';
 import { Prisma } from '@prisma/client';
-import { Request } from 'express';
 
 @Injectable()
 export class URLService {
@@ -13,17 +12,18 @@ export class URLService {
   constructor(private readonly urlRepository: URLRepository) {}
 
   async shortURL(
-    req: Request,
     shortURLDTO: ShortURLDTO,
+    requestParams: ShortURLRequestParams,
   ): Promise<ShortURLResponse> {
+    const { protocol, host, user } = requestParams;
     const shortCode = nanoid(this.SHORT_CODE_LENGTH);
-    const shortUrl = `${req.protocol}://${req.get('Host')}/${shortCode}`;
+    const shortUrl = `${protocol}://${host}/${shortCode}`;
 
     await this.urlRepository.create({
       origin: shortURLDTO.urlOrigin,
       shortCode,
       shortUrl,
-      userId: req.user?.userId,
+      userId: user?.userId,
     });
 
     return {
@@ -31,10 +31,8 @@ export class URLService {
     };
   }
 
-  async resolveRedirectByShortCode(where: Prisma.UrlWhereUniqueInput) {
-    const url = await this.urlRepository.updateAccessCount(where);
-
-    return { origin: url.origin };
+  resolveRedirectByShortCode(where: Prisma.UrlWhereUniqueInput) {
+    return this.urlRepository.updateAccessCount(where);
   }
 
   findFromUser(where: Prisma.UrlWhereInput) {

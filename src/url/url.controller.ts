@@ -38,14 +38,18 @@ export class URLController {
     description: 'The URL was successfully shortened.',
     schema: {
       example: {
-        shortUrl: 'https://your-domain.com/a1b2c3',
+        shortUrl: 'https://domain/a1b2c3',
       },
     },
   })
   @ApiResponse({ status: 400, description: 'Invalid URL format.' })
   @ApiBearerAuth('JWT')
   async shortURL(@Req() request: Request, @Body() shortURLDTO: ShortURLDTO) {
-    return this.urlService.shortURL(request, shortURLDTO);
+    return this.urlService.shortURL(shortURLDTO, {
+      host: request.host,
+      protocol: request.protocol,
+      user: request.user,
+    });
   }
 
   @UseGuards(JWTAuthGuard)
@@ -107,8 +111,6 @@ export class URLController {
     const urlOrigin = await this.urlService.resolveRedirectByShortCode({
       shortCode,
     });
-    if (urlOrigin) {
-      res.redirect(urlOrigin.origin);
-    }
+    res.redirect(urlOrigin.origin);
   }
 }
