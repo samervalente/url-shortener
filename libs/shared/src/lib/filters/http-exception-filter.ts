@@ -8,37 +8,52 @@ import {
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { constants } from '../../constants';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
   constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
 
-  catch(exception: unknown, host: ArgumentsHost): void {
+  catch(
+    exception: HttpException | PrismaClientKnownRequestError,
+    host: ArgumentsHost
+  ): void {
     const { httpAdapter } = this.httpAdapterHost;
-
     const ctx = host.switchToHttp();
+    console.log('exception', typeof exception);
+    console.log(
+      'is prisma',
+      exception instanceof PrismaClientKnownRequestError
+    );
+    console.log('exception', exception);
+    console.log('name', exception.name ?? '');
 
     let httpStatus: number = HttpStatus.BAD_REQUEST;
-    let message: string | string[] = 'A unknown error ocurred';
-    if (exception instanceof HttpException) {
-      httpStatus = exception.getStatus();
-      const response = exception.getResponse() as { message: string[] };
+    let message: string | string[] =
+      exception.message ?? 'An unknown error ocurred';
 
-      message = response.message ?? exception.message;
+    //HTTPExcetptions
+    if (exception.name === 'HttpException') {
+      const error = exception as HttpException;
+      httpStatus = error.getStatus();
+      const response = error.getResponse() as string | string[];
+
+      message = response;
     }
 
-    if (exception instanceof PrismaClientKnownRequestError) {
+    //Prisma errors
+    if (exception.name === 'PrismaClientKnownRequestError') {
+      const error = exception as PrismaClientKnownRequestError;
       const prismaErrorCodeMap: Record<
         PrismaClientKnownRequestError['code'],
         number
       > = {
-        P2025: HttpStatus.NOT_FOUND,
-        P2002: HttpStatus.CONFLICT,
+        [constants.PRISMA_NOT_FOUND_ERROR_CODE]: HttpStatus.NOT_FOUND,
+        [constants.PRISMA_CONFLICT_ERROR_CODE]: HttpStatus.CONFLICT,
       };
 
-      httpStatus = prismaErrorCodeMap[exception.code];
-
-      message = (exception.meta?.['cause'] as string) ?? exception.message;
+      httpStatus = prismaErrorCodeMap[error.code];
+      message = error.meta?.['cause'] as string;
     }
 
     const exceptionRawObject =
@@ -51,9 +66,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const stack = exception instanceof Error ? exception.stack : null;
 
     Logger.error(
-      `HTTPExceptionFilter:  exceptionRawObject: ${JSON.stringify(exceptionRawObject)} stack: ${JSON.stringify(
-        stack,
-      )}`,
+      `HTTPExceptionFilter:  exceptionRawObject: ${JSON.stringify(
+        exceptionRawObject
+      )} stack: ${JSON.stringify(stack)}`
     );
 
     const responseBody = {

@@ -1,0 +1,4 @@
+export const constants = {
+  PRISMA_CONFLICT_ERROR_CODE: 'P2002',
+  PRISMA_NOT_FOUND_ERROR_CODE: 'P2025',
+};
