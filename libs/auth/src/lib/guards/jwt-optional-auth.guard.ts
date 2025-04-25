@@ -5,7 +5,10 @@ import { UserJWTResponse } from '../types';
 
 @Injectable()
 export class JwtOptionalAuthGuard extends AuthGuard('jwt') {
-  handleRequest<TUser = UserJWTResponse>(err: any, user: TUser): TUser | null {
+  override handleRequest<TUser = UserJWTResponse>(
+    err: any,
+    user: TUser
+  ): TUser | null {
     return user || null;
   }
 }

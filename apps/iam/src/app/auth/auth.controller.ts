@@ -1,6 +1,6 @@
 import { Body, Controller, Logger, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody } from '@nestjs/swagger';
-import { LocalAuthGuard } from './guards/local-auth.guard';
+import { LocalAuthGuard } from '@libs/auth';
 
 import { SignUpDto } from './auth.dto';
 import { LoginCredentialsDTO } from './auth.dto';
@@ -56,13 +56,13 @@ export class AuthController {
   @ApiBody({ type: LoginCredentialsDTO })
   login(
     @Req() req: Request,
-    @Body() loginCredentialsDTO: LoginCredentialsDTO,
+    @Body() loginCredentialsDTO: LoginCredentialsDTO
   ): {
     accessToken: string;
   } {
     const logIdentifier = randomUUID();
     this.logger.log(
-      `[${logIdentifier}] - new login request with email ${loginCredentialsDTO.email}`,
+      `[${logIdentifier}] - new login request with email ${loginCredentialsDTO.email}`
     );
 
     return {

@@ -5,13 +5,12 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
-import { GenerateJWTPayload, UserJWTResponse } from './types';
+import { GenerateJWTPayload, UserJWTResponse } from '@libs/auth';
 
 import { SignUpDto } from './auth.dto';
 import * as bcrypt from 'bcrypt';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { UsersService } from '../users/users.service';
-import { hashStr } from '@libs/shared';
+import { hashStr, constants } from '@libs/shared';
 
 @Injectable()
 export class AuthService {
@@ -27,7 +26,7 @@ export class AuthService {
 
       return await this.usersService.create(user);
     } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
+      if (error.code === constants.PRISMA_CONFLICT_ERROR_CODE) {
         throw new ConflictException(
           `User with email ${user.email} already exist.`
         );

@@ -15,7 +15,7 @@ export class JWTAuthGuard extends AuthGuard('jwt') {
     super();
   }
 
-  canActivate(context: ExecutionContext) {
+  override canActivate(context: ExecutionContext) {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
@@ -27,7 +27,7 @@ export class JWTAuthGuard extends AuthGuard('jwt') {
     return super.canActivate(context);
   }
 
-  handleRequest<TUser = UserJWTResponse>(
+  override handleRequest<TUser = UserJWTResponse>(
     err: any,
     user: TUser,
     info: { name: string; message: string }
