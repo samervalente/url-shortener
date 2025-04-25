@@ -8,12 +8,26 @@ import { IamDbService } from '@shortener-ws/iam-db';
 export class UsersRepository {
   constructor(private prisma: IamDbService) {}
 
-  create(data: Prisma.UserCreateInput): Promise<UserPublic> {
+  async create(data: Prisma.UserCreateInput): Promise<UserPublic> {
+    const existingDeletedUser = await this.prisma.user.findUnique({
+      where: {
+        email: data.email,
+        deletedAt: { not: null },
+      },
+    });
+
+    if (existingDeletedUser) {
+      return this.prisma.user.update({
+        where: { id: existingDeletedUser.id },
+        data: {
+          ...data,
+          deletedAt: null,
+        },
+      });
+    }
+
     return this.prisma.user.create({
       data,
-      omit: {
-        password: true,
-      },
     });
   }
 
@@ -21,7 +35,10 @@ export class UsersRepository {
     where: Prisma.UserWhereUniqueInput
   ): Promise<UserPublic | null> {
     return this.prisma.user.findUniqueOrThrow({
-      where,
+      where: {
+        ...where,
+        deletedAt: null,
+      },
       omit: {
         id: true,
         password: true,
@@ -32,7 +49,10 @@ export class UsersRepository {
 
   findOne(where: Prisma.UserWhereUniqueInput): Promise<User | null> {
     return this.prisma.user.findUnique({
-      where,
+      where: {
+        ...where,
+        deletedAt: null,
+      },
     });
   }
 
@@ -42,7 +62,10 @@ export class UsersRepository {
   }): Promise<UserPublic> {
     return this.prisma.user.update({
       data: params.data,
-      where: params.where,
+      where: {
+        ...params.where,
+        deletedAt: null,
+      },
       omit: {
         password: true,
       },

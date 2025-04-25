@@ -20,25 +20,20 @@ export class HttpExceptionFilter implements ExceptionFilter {
   ): void {
     const { httpAdapter } = this.httpAdapterHost;
     const ctx = host.switchToHttp();
-    console.log('exception', typeof exception);
-    console.log(
-      'is prisma',
-      exception instanceof PrismaClientKnownRequestError
-    );
-    console.log('exception', exception);
-    console.log('name', exception.name ?? '');
 
     let httpStatus: number = HttpStatus.BAD_REQUEST;
     let message: string | string[] =
       exception.message ?? 'An unknown error ocurred';
 
-    //HTTPExcetptions
-    if (exception.name === 'HttpException') {
-      const error = exception as HttpException;
-      httpStatus = error.getStatus();
-      const response = error.getResponse() as string | string[];
+    //HttpExceptions
+    if (exception instanceof HttpException) {
+      httpStatus = exception.getStatus();
 
-      message = response;
+      const response = exception.getResponse() as {
+        message: string | string[];
+      };
+
+      message = response.message;
     }
 
     //Prisma errors

@@ -3,7 +3,7 @@
  * This is only a minimal backend to get started.
  */
 
-import { Logger } from '@nestjs/common';
+import { Logger, VersioningType } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { ValidationPipe } from '@nestjs/common';
@@ -17,8 +17,6 @@ async function bootstrap() {
   });
   const httpAdapter = app.get(HttpAdapterHost);
 
-  const globalPrefix = 'api';
-  app.setGlobalPrefix(globalPrefix);
 
   //swagger
   const config = new DocumentBuilder()
@@ -34,6 +32,13 @@ async function bootstrap() {
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
 
+  //versioning
+  app.enableVersioning({
+    type: VersioningType.URI,
+    defaultVersion: '1',
+    prefix: 'api/v',
+  });
+
   //validation pipes
   const validationPipeOptions: ValidationPipeOptions = {
     transform: true,
@@ -48,7 +53,7 @@ async function bootstrap() {
   await app
     .listen(port, () => {
       Logger.log(
-        `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
+        `🚀 Application is running on: http://localhost:${port}/api`
       );
     })
     .catch((err) => Logger.error(err));

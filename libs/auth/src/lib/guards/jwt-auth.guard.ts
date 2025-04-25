@@ -1,8 +1,7 @@
 import {
   ExecutionContext,
-  HttpException,
-  HttpStatus,
   Injectable,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UserJWTResponse } from '../types';
@@ -34,30 +33,20 @@ export class JWTAuthGuard extends AuthGuard('jwt') {
   ): TUser {
     if (info) {
       if (info.name === 'TokenExpiredError') {
-        throw new HttpException(
-          'Login session expired. Please log in again',
-          HttpStatus.FORBIDDEN
+        throw new UnauthorizedException(
+          'Login session expired. Please log in again'
         );
       }
 
       if (info.message === 'invalid signature') {
-        throw new HttpException(
-          'Invalid token signature.',
-          HttpStatus.UNAUTHORIZED
-        );
+        throw new UnauthorizedException('Invalid token signature.');
       }
 
       if (info.message === 'No auth token') {
-        throw new HttpException(
-          'No auth token provided.',
-          HttpStatus.UNAUTHORIZED
-        );
+        throw new UnauthorizedException('No auth token provided.');
       }
       if (info.message === 'jwt malformed') {
-        throw new HttpException(
-          'Invalid auth token provided.',
-          HttpStatus.UNAUTHORIZED
-        );
+        throw new UnauthorizedException('Invalid auth token provided.');
       }
     }
     return user;

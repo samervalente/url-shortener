@@ -15,7 +15,7 @@ export class URLService {
     shortURLDTO: ShortURLDTO,
     requestParams: ShortURLRequestParams
   ): Promise<ShortURLResponse> {
-    const { protocol, host, user } = requestParams;
+    const { protocol, host, user: requestUser } = requestParams;
     const shortCode = nanoid(this.SHORT_CODE_LENGTH);
     const shortUrl = `${protocol}://${host}/${shortCode}`;
 
@@ -23,11 +23,12 @@ export class URLService {
       origin: shortURLDTO.urlOrigin,
       shortCode,
       shortUrl,
-      userId: user?.userId,
+      userId: requestUser?.userId,
     });
 
     return {
       shortUrl,
+      ...(requestUser?.userId && { userId: requestUser.userId }),
     };
   }
 

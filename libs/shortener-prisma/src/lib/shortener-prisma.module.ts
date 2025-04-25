@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
+import { ShortenerPrismaService } from './shortener-prisma.service';
 
 @Module({
-  providers: [ShortenerPrismaModule],
-  exports: [ShortenerPrismaModule],
+  providers: [ShortenerPrismaService],
+  exports: [ShortenerPrismaService],
 })
 export class ShortenerPrismaModule {}

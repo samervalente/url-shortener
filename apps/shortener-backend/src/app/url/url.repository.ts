@@ -30,21 +30,17 @@ export class URLRepository {
   }
 
   updateAccessCount(where: Prisma.UrlWhereUniqueInput) {
-    console.log('where3', where);
-    return this.prisma.url.findUniqueOrThrow({
-      where,
+    return this.prisma.url.update({
+      where: {
+        ...where,
+        deletedAt: null,
+      },
+      data: {
+        accessCount: {
+          increment: 1,
+        },
+      },
     });
-    // return this.prisma.url.update({
-    //   where: {
-    //     ...where,
-    //     deletedAt: null,
-    //   },
-    //   data: {
-    //     accessCount: {
-    //       increment: 1,
-    //     },
-    //   },
-    // });
   }
 
   findFromUser(where: Prisma.UrlWhereInput) {
