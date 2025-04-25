@@ -3,11 +3,10 @@ import { Module } from '@nestjs/common';
 import { UsersRepository } from './users.repository';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
-import { IamPrismaModule } from '@libs/iam-prisma';
-
+import { IamDbModule } from '@shortener-ws/iam-db';
 
 @Module({
-  imports: [IamPrismaModule],
+  imports: [IamDbModule],
   controllers: [UsersController],
   providers: [UsersService, UsersRepository],
   exports: [UsersService],

@@ -37,10 +37,7 @@
       "options": {
         "targetName": "test"
       },
-      "exclude": [
-        "apps/shortener-backend-e2e/**/*",
-        "libs/shortener-prisma/apps/iam-e2e/**/*"
-      ]
+      "exclude": ["apps/shortener-backend-e2e/**/*", "apps/iam-e2e/**/*"]
     }
   ]
 }

@@ -22,14 +22,14 @@ async function bootstrap() {
 
   //swagger
   const config = new DocumentBuilder()
-    .setTitle('URL Shortener API Backend Test')
+    .setTitle('IAM API Backend Test')
     .setDescription('')
     .setVersion('1.0')
     .addBearerAuth(
       { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
       'JWT'
     )
-    .addTag('Teddy, Backend-test')
+    .addTag('Teddy, IAM-Backend-test')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);

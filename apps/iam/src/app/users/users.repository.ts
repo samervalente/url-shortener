@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 
 import { UserPublic } from './types';
 import { User, Prisma } from 'db/iam';
-import { IamPrismaService } from '@libs/iam-prisma';
+import { IamDbService } from '@shortener-ws/iam-db';
 
 @Injectable()
 export class UsersRepository {
-  constructor(private prismaService: IamPrismaService) {}
+  constructor(private prisma: IamDbService) {}
 
   create(data: Prisma.UserCreateInput): Promise<UserPublic> {
-    return this.prismaService.user.create({
+    return this.prisma.user.create({
       data,
       omit: {
         password: true,
@@ -18,18 +18,20 @@ export class UsersRepository {
   }
 
   findUserPublic(
-    where: Prisma.UserWhereUniqueInput,
+    where: Prisma.UserWhereUniqueInput
   ): Promise<UserPublic | null> {
-    return this.prismaService.user.findUnique({
+    return this.prisma.user.findUniqueOrThrow({
       where,
       omit: {
+        id: true,
         password: true,
+        role: true,
       },
     });
   }
 
   findOne(where: Prisma.UserWhereUniqueInput): Promise<User | null> {
-    return this.prismaService.user.findUniqueOrThrow({
+    return this.prisma.user.findUnique({
       where,
     });
   }
@@ -38,7 +40,7 @@ export class UsersRepository {
     where: Prisma.UserWhereUniqueInput;
     data: Prisma.UserUpdateInput;
   }): Promise<UserPublic> {
-    return this.prismaService.user.update({
+    return this.prisma.user.update({
       data: params.data,
       where: params.where,
       omit: {
@@ -48,7 +50,7 @@ export class UsersRepository {
   }
 
   softDelete(where: Prisma.UserWhereUniqueInput) {
-    return this.prismaService.user.update({
+    return this.prisma.user.update({
       where: {
         ...where,
         deletedAt: null,

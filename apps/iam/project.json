@@ -17,10 +17,16 @@
         }
       }
     },
+    "prisma-generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run prisma:generate"
+      }
+    },
     "serve": {
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
-      "dependsOn": ["build"],
+      "dependsOn": ["prisma-generate"],
       "options": {
         "buildTarget": "iam:build",
         "runBuildTargetDependencies": false

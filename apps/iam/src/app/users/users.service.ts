@@ -7,15 +7,13 @@ import { UserPublic } from './types';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly usersRepository: UsersRepository) {}
+  constructor(private usersRepository: UsersRepository) {}
 
   async create(data: CreateUserDTO): Promise<UserPublic> {
     return await this.usersRepository.create(data);
   }
 
-  async findPublic(
-    where: Prisma.UserWhereUniqueInput
-  ): Promise<UserPublic | null> {
+  async findPublic(where: Prisma.UserWhereUniqueInput) {
     return this.usersRepository.findUserPublic(where);
   }
 

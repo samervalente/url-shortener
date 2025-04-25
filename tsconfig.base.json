@@ -15,9 +15,10 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@libs/iam-prisma": ["libs/iam-prisma/src/index.ts"],
+      "@libs/auth": ["libs/auth/src/index.ts"],
       "@libs/shared": ["libs/shared/src/index.ts"],
-      "@libs/shortener-prisma": ["libs/shortener-prisma/src/index.ts"]
+      "@libs/shortener-prisma": ["libs/shortener-prisma/src/index.ts"],
+      "@shortener-ws/iam-db": ["libs/iam-db/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
