@@ -1,3 +1,3 @@
-# iam-prisma
+# iam-db
 
 This library was generated with [Nx](https://nx.dev).

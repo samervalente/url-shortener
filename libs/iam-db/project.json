@@ -1,40 +1,40 @@
 {
-  "name": "iam-prisma",
+  "name": "iam-db",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/iam-prisma/src",
+  "sourceRoot": "libs/iam-db/src",
   "projectType": "library",
   "tags": [],
-  "// targets": "to see all targets run: nx show project iam-prisma --web",
+  "// targets": "to see all targets run: nx show project iam-db --web",
   "targets": {
     "prisma": {
       "command": "prisma",
       "options": {
-        "cwd": "libs/iam-prisma"
+        "cwd": "libs/iam-db"
       }
     },
     "reset": {
       "command": "prisma migrate reset",
       "options": {
-        "cwd": "libs/iam-prisma"
+        "cwd": "libs/iam-db"
       }
     },
     "generate-types": {
       "command": "prisma generate",
       "options": {
-        "cwd": "libs/iam-prisma"
+        "cwd": "libs/iam-db"
       }
     },
     "migrate": {
       "command": "prisma migrate dev",
       "options": {
-        "cwd": "libs/iam-prisma"
+        "cwd": "libs/iam-db"
       }
     },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/iam-prisma/**/*.ts"]
+        "lintFilePatterns": ["libs/iam-db/**/*.ts"]
       }
     }
   }
