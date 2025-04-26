@@ -7,12 +7,21 @@ import { IamDbService } from '@libs/iam-db';
 @Injectable()
 export class UsersRepository {
   constructor(private prisma: IamDbService) {}
+  private readonly omit = {
+    id: true,
+    password: true,
+    role: true,
+  };
 
   async create(data: Prisma.UserCreateInput): Promise<UserPublic> {
     const existingDeletedUser = await this.prisma.user.findUnique({
       where: {
         email: data.email,
         deletedAt: { not: null },
+      },
+      omit: {
+        password: true,
+        role: true,
       },
     });
 
@@ -23,11 +32,13 @@ export class UsersRepository {
           ...data,
           deletedAt: null,
         },
+        omit: this.omit,
       });
     }
 
     return this.prisma.user.create({
       data,
+      omit: this.omit,
     });
   }
 
@@ -39,11 +50,7 @@ export class UsersRepository {
         ...where,
         deletedAt: null,
       },
-      omit: {
-        id: true,
-        password: true,
-        role: true,
-      },
+      omit: this.omit,
     });
   }
 
