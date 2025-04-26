@@ -1,0 +1,114 @@
+services:
+  # KrakenID for API Gateway
+  krakend:
+    image: krakend
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./krakend.json:/etc/krakend/krakend.json
+    command: ['run', '-c', '/etc/krakend/krakend.json']
+    networks:
+      - shortener-network
+    depends_on:
+      - iam-service
+      - shortener-service
+  iam-service:
+    image: iam-api:latest
+    build:
+      context: .
+      dockerfile: apps/iam/Dockerfile
+    ports:
+      - '${IAM_API_PORT:-3003}:3003'
+    environment:
+      - NODE_ENV=${NODE_ENV:-development}
+      - IAM_DATABASE_URL=${IAM_DATABASE_URL}
+      - SENTRY_DSN=${SENTRY_DSN}
+      - SENTRY_ENABLED=${IAM_SENTRY_ENABLED:-false}
+      - ACCESS_TOKEN_SECRET=${ACCESS_TOKEN_SECRET:-insecure_access_token}
+    networks:
+      - shortener-network
+    depends_on:
+      iam-db:
+        condition: service_healthy
+    healthcheck:
+      test: ['CMD-SHELL', 'curl -f http://localhost:3003/api/health || exit 1']
+      interval: 30s
+      timeout: 20s
+      retries: 3
+      start_period: 60s
+  shortener-service:
+    image: shortener-api:latest
+    build:
+      context: .
+      dockerfile: apps/shortener-backend/Dockerfile
+    ports:
+      - '${SHORTENER_API_PORT:-3006}:3006'
+    environment:
+      - NODE_ENV=${NODE_ENV:-development}
+      - URL_SHORTENER_DATABASE_URL=${URL_SHORTENER_DATABASE_URL}
+      - SENTRY_DSN=${SENTRY_DSN}
+      - SENTRY_ENABLED=${SHORTENER_SENTRY_ENABLED:-false}
+      - ACCESS_TOKEN_SECRET=${ACCESS_TOKEN_SECRET:-insecure_access_token}
+    networks:
+      - shortener-network
+    depends_on:
+      iam-db:
+        condition: service_healthy
+    healthcheck:
+      test: ['CMD-SHELL', 'curl -f http://localhost:3006/api/health || exit 1']
+      interval: 30s
+      timeout: 20s
+      retries: 3
+      start_period: 60s
+  iam-db:
+    image: postgres:${POSTGRES_VERSION:-14-alpine}
+    environment:
+      - POSTGRES_DB=${IAM_DB_NAME:-iam_pg}
+      - POSTGRES_USER=${IAM_DB_USER:-iam_user}
+      - POSTGRES_PASSWORD=${IAM_DB_PASSWORD:-iam_password}
+    volumes:
+      - iam-db-data:/var/lib/postgresql/data
+    networks:
+      - shortener-network
+    ports:
+      - '5432:5432'
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'pg_isready -U ${IAM_DB_USER:-iam_user} -d ${IAM_DB_NAME:-iam_pg}',
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+  shortener-api-db:
+    image: postgres:${POSTGRES_VERSION:-14-alpine}
+    environment:
+      - POSTGRES_DB=${SHORTENER_DB_NAME:-shortener_pg}
+      - POSTGRES_USER=${SHORTENER_DB_USER:-shortener_user}
+      - POSTGRES_PASSWORD=${SHORTENER_DB_PASSWORD:-shortener_password}
+    volumes:
+      - shortener-db-data:/var/lib/postgresql/data
+    networks:
+      - shortener-network
+    ports:
+      - '5433:5432'
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'pg_isready -U ${SHORTENER_DB_USER:-shortener_user} -d ${SHORTENER_DB_NAME:-shortener_pg}',
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  iam-db-data:
+  shortener-db-data:
+
+networks:
+  shortener-network:
+    driver: bridge

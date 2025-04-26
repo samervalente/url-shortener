@@ -17,6 +17,10 @@
         }
       }
     },
+    "docker-build": {
+      "dependsOn": ["build"],
+      "command": "docker build -f apps/shortener-backend/Dockerfile . -t shortener-api:latest"
+    },
     "serve": {
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",

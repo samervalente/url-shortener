@@ -17,6 +17,10 @@
         }
       }
     },
+    "docker-build": {
+      "dependsOn": ["build"],
+      "command": "docker build -f apps/iam/Dockerfile . -t iam"
+    },
     "prisma-generate": {
       "executor": "nx:run-commands",
       "options": {
