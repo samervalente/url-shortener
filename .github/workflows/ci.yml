@@ -34,4 +34,4 @@ jobs:
           npx nx shortener-prisma:generate-types
 
       - name: Run lint, test and build
-      - run: npx nx affected -t lint test build
+        run: npx nx affected -t lint test build
