@@ -75,4 +75,13 @@ export class URLRepository {
       },
     });
   }
+
+  getRanking() {
+    return this.prisma.url.findMany({
+      orderBy: {
+        accessCount: 'desc',
+      },
+      take: 5,
+    });
+  }
 }

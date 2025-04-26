@@ -65,6 +65,21 @@ export class URLController {
     return this.urlService.findFromUser({ userId: req.user.userId });
   }
 
+  @Get('ranking')
+  @ApiOperation({
+    summary: 'Get the ranking of the most accessed short URLs.',
+    description:
+      'Returns the top 5 most accessed short URLs, ordered in descending order based on the access count.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'A list of URLS',
+    type: [URLResponseDTO],
+  })
+  async getRanking() {
+    return this.urlService.getRanking();
+  }
+
   @UseGuards(JWTAuthGuard)
   @Roles(RoleEnum.USER, RoleEnum.ADMIN)
   @ApiBearerAuth('JWT')

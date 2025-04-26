@@ -15,7 +15,7 @@ RUN npm ci --legacy-peer-deps
 
 COPY . .
 
-RUN npx prisma generate --schema=./libs/shortener-prisma/prisma/schema.prisma 
+RUN npx nx run shortener-prisma:generate-types && npx nx run iam-db:generate-types
 
 RUN npx nx build shortener-backend
 

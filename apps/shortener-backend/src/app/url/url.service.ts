@@ -47,4 +47,8 @@ export class URLService {
   softDelete(where: Prisma.UrlWhereUniqueInput) {
     return this.urlRepository.softDelete(where);
   }
+
+  getRanking() {
+    return this.urlRepository.getRanking();
+  }
 }

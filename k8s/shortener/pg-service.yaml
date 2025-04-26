@@ -5,8 +5,9 @@ metadata:
   name: shortener-db
 spec:
   selector:
-    app: postgres
+    app: shortener-db
   ports:
     - protocol: TCP
       port: 5432
       targetPort: 5432
+  type: ClusterIP

@@ -2,16 +2,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: shortener-postgres
+  name: shortener-db
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: postgres
+      app: shortener-db
   template:
     metadata:
       labels:
-        app: postgres
+        app: shortener-db
     spec:
       containers:
         - name: postgres
@@ -27,7 +27,7 @@ spec:
               value: shortener_password
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
-              name: postgres-storage
+              name:  shortener-db-storage
       volumes:
-        - name: postgres-storage
+        - name: shortener-db-storage
           emptyDir: {}

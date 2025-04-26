@@ -21,5 +21,4 @@ spec:
             - name: URL_SHORTENER_DATABASE_URL
               value: postgresql://shortener_user:shortener_password@shortener-db:5432/shortener_pg
             - name: ACCESS_TOKEN_SECRET
-              value: very_secret            
-
+              value: very_secret
