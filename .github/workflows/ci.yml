@@ -30,8 +30,8 @@ jobs:
 
       - name: Generate Prisma Clients
         run: |
-          npx nx iam-db:generate-types
-          npx nx shortener-prisma:generate-types
+          npx nx run iam-db:generate-types
+          npx nx run shortener-prisma:generate-types
 
       - name: Run lint, test and build
         run: npx nx affected -t lint test build
