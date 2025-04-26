@@ -7,11 +7,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
-import { RoleEnum } from 'db/iam';
-
 jest.mock('nanoid', () => ({
   nanoid: jest.fn().mockReturnValue('abc123'),
 }));
+
+jest.mock('@libs/shortener-prisma', () => ({}));
 
 const mockRequest = {
   protocol: 'http',
@@ -26,7 +26,7 @@ const mockAuthenticatedRequest = {
     userId: 'b46e3ce8-be4b-4a20-a0e7-b58c567fc8f2',
     email: 'email@example.com',
     accessToken: 'jwt_access_token',
-    role: RoleEnum.USER,
+    role: 'user',
   },
 };
 

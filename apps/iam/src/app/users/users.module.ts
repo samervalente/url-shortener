@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { UsersRepository } from './users.repository';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
-import { IamDbModule } from '@shortener-ws/iam-db';
+import { IamDbModule } from '@libs/iam-db';
 
 @Module({
   imports: [IamDbModule],

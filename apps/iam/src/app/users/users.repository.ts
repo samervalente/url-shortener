@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { UserPublic } from './types';
 import { User, Prisma } from 'db/iam';
-import { IamDbService } from '@shortener-ws/iam-db';
+import { IamDbService } from '@libs/iam-db';
 
 @Injectable()
 export class UsersRepository {

@@ -38,6 +38,13 @@
         "targetName": "test"
       },
       "exclude": ["apps/shortener-backend-e2e/**/*", "apps/iam-e2e/**/*"]
+    },
+    {
+      "plugin": "@nx-tools/nx-container",
+      "options": {
+        "defaultEngine": "docker",
+        "defaultRegistry": "docker.io"
+      }
     }
   ]
 }

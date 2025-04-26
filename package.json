@@ -4,7 +4,18 @@
   "license": "MIT",
   "scripts": {
     "start:iam": "nx serve iam",
-    "prisma:generate": "prisma generate --schema=./libs/iam-db/prisma/schema.prisma"
+    "prisma:generate": "prisma generate --schema=./libs/iam-db/prisma/schema.prisma && prisma generate --schema=./libs/shortener-prisma/prisma/schema.prisma ",
+    "k8s:apply": "kubectl apply -f ./k8s -R",
+    "test": "jest",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{js,ts}": [
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
   },
   "private": true,
   "dependencies": {
@@ -15,6 +26,7 @@
     "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^10.0.2",
     "@nestjs/swagger": "^11.1.5",
+    "@nestjs/terminus": "^11.0.0",
     "@prisma/client": "^6.6.0",
     "axios": "^1.6.0",
     "bcrypt": "^5.1.1",
@@ -27,9 +39,12 @@
     "rxjs": "^7.8.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
     "@eslint/js": "^9.8.0",
     "@nestjs/schematics": "^10.0.1",
     "@nestjs/testing": "^10.0.2",
+    "@nx-tools/nx-container": "^6.2.0",
     "@nx/eslint": "20.8.0",
     "@nx/eslint-plugin": "20.8.0",
     "@nx/jest": "20.8.0",
@@ -48,6 +63,7 @@
     "@types/passport-jwt": "^4.0.1",
     "eslint": "^9.8.0",
     "eslint-config-prettier": "^10.0.0",
+    "husky": "^9.1.7",
     "jest": "^29.7.0",
     "jest-environment-node": "^29.7.0",
     "nx": "20.8.0",
