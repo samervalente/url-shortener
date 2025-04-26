@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iam-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: iam-api
+  template:
+    metadata:
+      labels:
+        app: iam-api
+    spec:
+      containers:
+        - name: iam-api
+          image: samersams/iam-api:latest
+          ports:
+            - containerPort: 3003
+          env:
+            - name: IAM_DATABASE_URL
+              value: postgresql://iam_user:iam_password@iam-db:5432/iam_pg
+            - name: ACCESS_TOKEN_SECRET
+              value: very_secret            
+

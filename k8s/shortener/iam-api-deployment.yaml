@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shortener-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shortener-api
+  template:
+    metadata:
+      labels:
+        app: shortener-api
+    spec:
+      containers:
+        - name: shortener-api
+          image: samersams/shortener-api:latest
+          ports:
+            - containerPort: 3006
+          env:
+            - name: URL_SHORTENER_DATABASE_URL
+              value: postgresql://shortener_user:shortener_password@shortener-db:5432/shortener_pg
+            - name: ACCESS_TOKEN_SECRET
+              value: very_secret            
+
