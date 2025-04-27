@@ -41,7 +41,7 @@
                   "response": []
                 },
                 {
-                  "name": "Autenticar Usuaário",
+                  "name": "Autenticar Usuário",
                   "event": [
                     {
                       "listen": "test",
@@ -393,7 +393,7 @@
                   "response": []
                 },
                 {
-                  "name": "Autenticar Usuaário",
+                  "name": "Autenticar Usuário",
                   "event": [
                     {
                       "listen": "test",
