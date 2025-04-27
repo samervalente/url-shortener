@@ -26,6 +26,7 @@ export class AuthService {
 
       return await this.usersService.create(user);
     } catch (error) {
+      console.log('error', error);
       if (error.code === constants.PRISMA_CONFLICT_ERROR_CODE) {
         throw new ConflictException(
           `User with email ${user.email} already exist.`

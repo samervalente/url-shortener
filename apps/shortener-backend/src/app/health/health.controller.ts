@@ -6,7 +6,7 @@ import {
 } from '@nestjs/terminus';
 import { ShortenerPrismaService } from '@libs/shortener-prisma';
 
-@Controller('health')
+@Controller('shortener/health')
 export class HealthController {
   private readonly logger = new Logger(HealthCheck.name, { timestamp: true });
 

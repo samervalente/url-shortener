@@ -78,6 +78,9 @@ export class URLRepository {
 
   getRanking() {
     return this.prisma.url.findMany({
+      where: {
+        deletedAt: null,
+      },
       orderBy: {
         accessCount: 'desc',
       },
