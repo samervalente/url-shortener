@@ -5,22 +5,62 @@
   "port": 8080,
   "endpoints": [
     {
-      "endpoint": "/api/v1/signup",
+      "endpoint": "/api/v1/auth/signup",
       "method": "POST",
       "backend": [
         {
           "host": ["http://104.155.158.165:3003"],
-          "url_pattern": "/signup"
+          "url_pattern": "/api/v1/auth/signup"
         }
       ]
     },
     {
-      "endpoint": "/api/v1/login",
+      "endpoint": "/api/v1/auth/login",
       "method": "POST",
       "backend": [
         {
           "host": ["http://104.155.158.165:3003"],
-          "url_pattern": "/login"
+          "url_pattern": "/api/v1/auth/login"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/v1/auth/users",
+      "method": "GET",
+      "backend": [
+        {
+          "host": ["http://104.155.158.165:3003"],
+          "url_pattern": "/api/v1/auth/users"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/v1/users/{id}",
+      "method": "PUT",
+      "backend": [
+        {
+          "host": ["http://34.71.71.218:3003"],
+          "url_pattern": "/api/v1/users/{id}"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/v1/users/{id}",
+      "method": "DELETE",
+      "backend": [
+        {
+          "host": ["http://34.71.71.218:3003"],
+          "url_pattern": "/api/v1/users/{id}"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/v1/health",
+      "method": "GET",
+      "backend": [
+        {
+          "host": ["http://104.155.158.165:3003"],
+          "url_pattern": "/api/v1/health"
         }
       ]
     },
@@ -31,6 +71,16 @@
         {
           "host": ["http://34.71.71.218:3006"],
           "url_pattern": "/api/short"
+        }
+      ]
+    },
+    {
+      "endpoint": "/user",
+      "method": "GET",
+      "backend": [
+        {
+          "host": ["http://34.71.71.218:3006"],
+          "url_pattern": "/user"
         }
       ]
     },
@@ -46,12 +96,12 @@
       ]
     },
     {
-      "endpoint": "/users/{id}/public",
+      "endpoint": "/user/{id}/public",
       "method": "GET",
       "backend": [
         {
           "host": ["http://34.71.71.218:3006"],
-          "url_pattern": "/api/user/{id}/public"
+          "url_pattern": "/user/{id}/public"
         }
       ]
     },
@@ -61,7 +111,7 @@
       "backend": [
         {
           "host": ["http://34.71.71.218:3006"],
-          "url_pattern": "/api/{id}/origin"
+          "url_pattern": "/{id}/origin"
         }
       ]
     },
