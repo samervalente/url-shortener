@@ -14,13 +14,13 @@ Plataforma escalável para encurtamento de URLs, construída com NX e NestJS, e 
 ## Índice
 
 - [Funcionalidades](#funcionalidades)
-- [Tecnologias Utilizadas](#tecnologias-utilizadas)
+- [Tecnologias e estratégias utilizadas](#tecnologias-e-estratégias-utilizadas)
 - [Arquitetura](#arquitetura)
 - [Pré-requisitos](#pré-requisitos)
 - [Rodando local com Docker Compose](#rodando-local-com-docker-compose)
 - [Rodando local com Kubernetes](#rodando-local-com-kubernetes)
 - [Testes](#testes)
-- [Escalando a aplicação horizontalmente](#escalando-a-aplicacao-horizontalmente)
+- [Escalando a aplicação horizontalmente](#escalando-a-aplicação-horizontalmente)
 
 ## Funcionalidades
 
@@ -65,6 +65,7 @@ Plataforma escalável para encurtamento de URLs, construída com NX e NestJS, e 
 - Node.js (recomendada a versão >= v20)
 - npm
 - Docker
+- Minikube ou Kind: [Instale aqui](https://kubernetes.io/pt-br/docs/tasks/tools/)
 - Kubectl
 
 ## Rodando local com Docker Compose
