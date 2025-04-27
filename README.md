@@ -9,7 +9,9 @@ Plataforma escalável para encurtamento de URLs, construída com NX e NestJS, e 
 
 1. IAM: acesse em [IAM API](http://104.155.158.165:3003/api)
 
-1. URL Shortener: acesse em [URL Shortener API](http://34.71.71.218:3006/api)
+2. URL Shortener: acesse em [URL Shortener API](http://34.71.71.218:3006/api)
+
+3. API Gateway: disponível em `http://34.136.194.12:8000`. Ex: [Acessar Shortener Ranking](http://34.136.194.12:8000/ranking)
 
 ## Índice
 
