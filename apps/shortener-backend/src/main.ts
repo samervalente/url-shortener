@@ -10,6 +10,7 @@ import { ValidationPipe } from '@nestjs/common';
 
 import { HttpExceptionFilter, ValidationPipeOptions } from '@libs/shared';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { json } from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -39,6 +40,7 @@ async function bootstrap() {
   };
   app.useGlobalPipes(new ValidationPipe(validationPipeOptions));
   app.useGlobalFilters(new HttpExceptionFilter(httpAdapter));
+  app.use(json());
 
   const port = process.env.PORT || 3006;
 

@@ -1,0 +1,89 @@
+{
+  "version": 3,
+  "name": "shortener-gateway",
+  "timeout": "3000ms",
+  "port": 8080,
+  "endpoints": [
+    {
+      "endpoint": "/api/v1/signup",
+      "method": "POST",
+      "backend": [
+        {
+          "host": ["http://104.155.158.165:3003"],
+          "url_pattern": "/signup"
+        }
+      ]
+    },
+    {
+      "endpoint": "/api/v1/login",
+      "method": "POST",
+      "backend": [
+        {
+          "host": ["http://104.155.158.165:3003"],
+          "url_pattern": "/login"
+        }
+      ]
+    },
+    {
+      "endpoint": "/short",
+      "method": "POST",
+      "backend": [
+        {
+          "host": ["http://34.71.71.218:3006"],
+          "url_pattern": "/api/short"
+        }
+      ]
+    },
+    {
+      "endpoint": "/ranking",
+      "method": "GET",
+      "backend": [
+        {
+          "host": ["http://34.71.71.218:3006"],
+          "url_pattern": "/ranking",
+          "encoding": "json"
+        }
+      ]
+    },
+    {
+      "endpoint": "/users/{id}/public",
+      "method": "GET",
+      "backend": [
+        {
+          "host": ["http://34.71.71.218:3006"],
+          "url_pattern": "/api/user/{id}/public"
+        }
+      ]
+    },
+    {
+      "endpoint": "/{id}/origin",
+      "method": "PATCH",
+      "backend": [
+        {
+          "host": ["http://34.71.71.218:3006"],
+          "url_pattern": "/api/{id}/origin"
+        }
+      ]
+    },
+    {
+      "endpoint": "/shortener/health",
+      "method": "GET",
+      "backend": [
+        {
+          "host": ["http://34.71.71.218:3006"],
+          "url_pattern": "/shortener/health"
+        }
+      ]
+    },
+    {
+      "endpoint": "/{id}",
+      "method": "DELETE",
+      "backend": [
+        {
+          "host": ["http://34.71.71.218:3006"],
+          "url_pattern": "/api/{id}"
+        }
+      ]
+    }
+  ]
+}

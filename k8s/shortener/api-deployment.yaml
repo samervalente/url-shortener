@@ -14,7 +14,8 @@ spec:
     spec:
       containers:
         - name: shortener-api
-          image: samersams/shortener-api:latest
+          image: samersams/shortener-api:0.0.1
+          imagePullPolicy: Always
           ports:
             - containerPort: 3006
           env:

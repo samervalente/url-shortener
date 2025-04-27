@@ -48,7 +48,11 @@ export class URLService {
     return this.urlRepository.softDelete(where);
   }
 
-  getRanking() {
-    return this.urlRepository.getRanking();
+  async getRanking() {
+    const ranking = await this.urlRepository.getRanking();
+
+    return {
+      data: ranking,
+    };
   }
 }
