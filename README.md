@@ -19,6 +19,7 @@ Plataforma escalável para encurtamento de URLs, construída com NX e NestJS, e 
 - [Pré-requisitos](#pré-requisitos)
 - [Rodando local com Docker Compose](#rodando-local-com-docker-compose)
 - [Rodando local com Kubernetes](#rodando-local-com-kubernetes)
+- [Acessando a API via Postman](#acessando-a-api-via-postman)
 - [Testes](#testes)
 - [Escalando a aplicação horizontalmente](#escalando-a-aplicação-horizontalmente)
 
@@ -99,15 +100,11 @@ docker-compose up --build
 - IAM: <http://localhost:3003/api>
 - URL Shortener: <http://localhost:3006/api>
 
-5. Importe ou acesse coleção do postman
-   **Importando a coleção do postman**
-   - Abra o Postman
-   - Clique no botão "Importar"
-   - Selecione o arquivo `postman.json` que está na raiz do projeto
+### Acessando a API via Postman
+   - **Importe a coleção**: Selecione o arquivo `postman_collection.json`  que está na raiz do projeto
+   - **Importe o environment**: Selecione o arquivo `postman_environment.json`que está na raiz do projeto
 
-  **Acessando a documentação no postman**
-  - Acesse em: [Shortener API Documentação Postman](https://documenter.getpostman.com/view/19138131/2sB2j1gsGq)
-  
+  Ou se você preferir, acesse em: [Shortener API Documentação Postman](https://documenter.getpostman.com/view/19138131/2sB2j1gsGq)
 
    Observação: A coleção está configurada para definir automaticamente a variável `accessToken` após a execução das requisições correspondentes.
  
