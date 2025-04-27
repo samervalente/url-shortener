@@ -99,13 +99,18 @@ docker-compose up --build
 - IAM: <http://localhost:3003/api>
 - URL Shortener: <http://localhost:3006/api>
 
-5. Importe a coleção do postman
-
+5. Importe ou acesse coleção do postman
+   **Importando a coleção do postman**
    - Abra o Postman
    - Clique no botão "Importar"
    - Selecione o arquivo `postman.json` que está na raiz do projeto
 
-Observação: A coleção está configurada para definir automaticamente a variável `accessToken` após a execução das requisições correspondentes.
+  **Acessando a documentação no postman**
+  - Acesse em: [Shortener API Documentação Postman](https://documenter.getpostman.com/view/19138131/2sB2j1gsGq)
+  
+
+   Observação: A coleção está configurada para definir automaticamente a variável `accessToken` após a execução das requisições correspondentes.
+ 
 
 ## Rodando local com Kubernetes
 
