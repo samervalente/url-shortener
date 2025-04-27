@@ -1,0 +1,708 @@
+{
+  "info": {
+    "_postman_id": "eca25fad-8776-422e-8162-b9231badbdb0",
+    "name": "Shortener",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "19138131"
+  },
+  "item": [
+    {
+      "name": "Cloud",
+      "item": [
+        {
+          "name": "IAM API",
+          "item": [
+            {
+              "name": "Auth",
+              "item": [
+                {
+                  "name": "Cadastrar usuário",
+                  "request": {
+                    "auth": {
+                      "type": "noauth"
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"email\": \"john.doe23@example.com\",\n  \"password\": \"securePassword123!\",\n  \"name\": \"John Doe\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{iam_cloud}}/auth/signup",
+                      "host": ["{{iam_cloud}}"],
+                      "path": ["auth", "signup"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Autenticar Usuaário",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "if (pm.response.code === 201) {",
+                          "    var jsonResponse = pm.response.json();",
+                          "    var accessToken = jsonResponse.accessToken; ",
+                          "",
+                          "    pm.environment.set(\"cloud_access_token\", accessToken);",
+                          "}",
+                          ""
+                        ],
+                        "type": "text/javascript",
+                        "packages": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"securePassword123!\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{iam_cloud}}/auth/login",
+                      "host": ["{{iam_cloud}}"],
+                      "path": ["auth", "login"]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Users",
+              "item": [
+                {
+                  "name": "Buscar usuário [Publico]",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{iam_cloud}}/users/:userId/public",
+                      "host": ["{{iam_cloud}}"],
+                      "path": ["users", ":userId", "public"],
+                      "variable": [
+                        {
+                          "key": "userId",
+                          "value": ""
+                        }
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Atualizar usuário",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{cloud_access_token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"name\": \"John Doe\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{iam_local}}/users/:userId",
+                      "host": ["{{iam_local}}"],
+                      "path": ["users", ":userId"],
+                      "variable": [
+                        {
+                          "key": "userId",
+                          "value": ""
+                        }
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Deletar usuário",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{cloud_access_token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{iam_local}}/users/:userId",
+                      "host": ["{{iam_local}}"],
+                      "path": ["users", ":userId"],
+                      "variable": [
+                        {
+                          "key": "userId",
+                          "value": ""
+                        }
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Health",
+              "item": [
+                {
+                  "name": "Health check",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{iam_local}}/health",
+                      "host": ["{{iam_local}}"],
+                      "path": ["health"]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Shortener API",
+          "item": [
+            {
+              "name": "Health",
+              "item": [
+                {
+                  "name": "Health check",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{shortener_local}}/shortener/health",
+                      "host": ["{{shortener_local}}"],
+                      "path": ["shortener", "health"]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "URL",
+              "item": [
+                {
+                  "name": "Encurtar URL",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{cloud_access_token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"urlOrigin\": \"https://example.com\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{shortener_local}}/short",
+                      "host": ["{{shortener_local}}"],
+                      "path": ["short"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Busca URLs do usuário",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{cloud_access_token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{shortener_local}}/user",
+                      "host": ["{{shortener_local}}"],
+                      "path": ["user"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Buscar ranking",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{shortener_local}}/ranking",
+                      "host": ["{{shortener_local}}"],
+                      "path": ["ranking"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Atualiza origem da URL",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{cloud_access_token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PATCH",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"urlOrigin\": \"https://example2.com\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{shortener_local}}/:idUrl/origin",
+                      "host": ["{{shortener_local}}"],
+                      "path": [":idUrl", "origin"],
+                      "variable": [
+                        {
+                          "key": "idUrl",
+                          "value": ""
+                        }
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Deletar URL",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{cloud_access_token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{shortener_local}}/:idUrl",
+                      "host": ["{{shortener_local}}"],
+                      "path": [":idUrl"],
+                      "variable": [
+                        {
+                          "key": "idUrl",
+                          "value": ""
+                        }
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Local",
+      "item": [
+        {
+          "name": "IAM API",
+          "item": [
+            {
+              "name": "Auth",
+              "item": [
+                {
+                  "name": "Cadastrar usuário",
+                  "request": {
+                    "auth": {
+                      "type": "noauth"
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"securePassword123!\",\n  \"name\": \"John Doe\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{iam_local}}/auth/signup",
+                      "host": ["{{iam_local}}"],
+                      "path": ["auth", "signup"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Autenticar Usuaário",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "if (pm.response.code === 201) {",
+                          "    var jsonResponse = pm.response.json();",
+                          "    var accessToken = jsonResponse.accessToken; ",
+                          "",
+                          "    pm.environment.set(\"local_access_token\", accessToken);",
+                          "}",
+                          ""
+                        ],
+                        "type": "text/javascript",
+                        "packages": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"password\": \"securePassword123!\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{iam_local}}/auth/login",
+                      "host": ["{{iam_local}}"],
+                      "path": ["auth", "login"]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Users",
+              "item": [
+                {
+                  "name": "Buscar usuário [Publico]",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{iam_local}}/users/:userId/public",
+                      "host": ["{{iam_local}}"],
+                      "path": ["users", ":userId", "public"],
+                      "variable": [
+                        {
+                          "key": "userId",
+                          "value": ""
+                        }
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Atualizar usuário",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{local_access_token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PUT",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"email\": \"john.doe@example.com\",\n  \"name\": \"John Doe\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{iam_local}}/users/:userId",
+                      "host": ["{{iam_local}}"],
+                      "path": ["users", ":userId"],
+                      "variable": [
+                        {
+                          "key": "userId",
+                          "value": ""
+                        }
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Deletar usuário",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{local_access_token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{iam_local}}/users/:userId",
+                      "host": ["{{iam_local}}"],
+                      "path": ["users", ":userId"],
+                      "variable": [
+                        {
+                          "key": "userId",
+                          "value": ""
+                        }
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Health",
+              "item": [
+                {
+                  "name": "Health check",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{iam_local}}/health",
+                      "host": ["{{iam_local}}"],
+                      "path": ["health"]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Shortener API",
+          "item": [
+            {
+              "name": "Health",
+              "item": [
+                {
+                  "name": "Health check",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{shortener_local}}/shortener/health",
+                      "host": ["{{shortener_local}}"],
+                      "path": ["shortener", "health"]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "URL",
+              "item": [
+                {
+                  "name": "Encurtar URL",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{local_access_token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"urlOrigin\": \"https://example.com\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{shortener_local}}/short",
+                      "host": ["{{shortener_local}}"],
+                      "path": ["short"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Busca URLs do usuário",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{local_access_token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{shortener_local}}/user",
+                      "host": ["{{shortener_local}}"],
+                      "path": ["user"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Buscar ranking",
+                  "request": {
+                    "method": "GET",
+                    "header": [],
+                    "url": {
+                      "raw": "{{shortener_local}}/ranking",
+                      "host": ["{{shortener_local}}"],
+                      "path": ["ranking"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Atualiza origem da URL",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{local_access_token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "PATCH",
+                    "header": [],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"urlOrigin\": \"https://example.com\"\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{shortener_local}}/0e04c394-e587-4cf4-9c55-ddc1c3656f90/origin",
+                      "host": ["{{shortener_local}}"],
+                      "path": ["0e04c394-e587-4cf4-9c55-ddc1c3656f90", "origin"]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Deletar URL",
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": [
+                        {
+                          "key": "token",
+                          "value": "{{local_access_token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "DELETE",
+                    "header": [],
+                    "url": {
+                      "raw": "{{shortener_local}}/:idUrl",
+                      "host": ["{{shortener_local}}"],
+                      "path": [":idUrl"],
+                      "variable": [
+                        {
+                          "key": "idUrl",
+                          "value": ""
+                        }
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
